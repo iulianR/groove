@@ -1,0 +1,23 @@
+[package]
+name = "groove"
+version = "0.1.0"
+authors = ["Iulian Gabriel Radu <iulian.radu67@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+legion = "0.2"
+# wgpu = { git = "https://github.com/gfx-rs/wgpu-rs" }
+winit = "0.21"
+futures = "0.3"
+env_logger = "0.7.1"
+wgpu = "0.5.0"
+imgui = "0.3.0"
+imgui-wgpu = "0.6.0"
+anyhow = "1.0"
+
+[dependencies.imgui-winit-support]
+version = "0.3"
+default-features = false
+features = ["winit-20"]
