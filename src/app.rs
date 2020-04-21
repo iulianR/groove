@@ -27,17 +27,36 @@ impl App {
     }
 
     pub fn run(mut self, event_loop: EventLoop<()>) {
-        let vs = include_bytes!("shader.vert.spv");
-        let vs_module = self
-            .renderer
-            .device
-            .create_shader_module(&wgpu::read_spirv(std::io::Cursor::new(&vs[..])).unwrap());
+        let mut compiler = shaderc::Compiler::new().expect("could not find shaderc");
+        let vs = include_str!("shader.vert");
+        let vertex_bin = compiler
+            .compile_into_spirv(
+                vs,
+                shaderc::ShaderKind::Vertex,
+                "shader.vert",
+                "main",
+                None,
+            )
+            .unwrap();
 
-        let fs = include_bytes!("shader.frag.spv");
-        let fs_module = self
-            .renderer
-            .device
-            .create_shader_module(&wgpu::read_spirv(std::io::Cursor::new(&fs[..])).unwrap());
+        let fs = include_str!("shader.frag");
+        let fragment_bin = compiler
+            .compile_into_spirv(
+                fs,
+                shaderc::ShaderKind::Fragment,
+                "shader.frag",
+                "main",
+                None,
+            )
+            .unwrap();
+        
+        let vs_module = self.renderer.device.create_shader_module(
+            &wgpu::read_spirv(std::io::Cursor::new(&vertex_bin.as_binary_u8()[..])).unwrap(),
+        );
+
+        let fs_module = self.renderer.device.create_shader_module(
+            &wgpu::read_spirv(std::io::Cursor::new(&fragment_bin.as_binary_u8()[..])).unwrap(),
+        );
 
         let bind_group_layout =
             self.renderer

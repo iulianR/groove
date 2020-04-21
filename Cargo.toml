@@ -16,6 +16,7 @@ wgpu = "0.5.0"
 imgui = "0.3.0"
 imgui-wgpu = "0.6.0"
 anyhow = "1.0"
+shaderc = "0.6"
 
 [dependencies.imgui-winit-support]
 version = "0.3"
